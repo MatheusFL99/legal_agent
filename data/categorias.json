@@ -1,0 +1,39 @@
+{
+  "pesquisa_lei": [
+    "lei",
+    "artigo",
+    "constituição",
+    "código civil",
+    "código penal",
+    "consolidação",
+    "CLT",
+    "estatuto",
+    "norma"
+  ],
+  "calculo_trabalhista": [
+    "férias",
+    "rescisão",
+    "13º salário",
+    "demissão",
+    "salário",
+    "hora extra",
+    "indenização",
+    "aviso prévio"
+  ],
+  "explicacao_lei": [
+    "explicar",
+    "o que significa",
+    "me explique",
+    "me diga sobre",
+    "como funciona",
+    "qual é a regra"
+  ],
+  "pergunta_geral": [
+    "quais são",
+    "como faço",
+    "o que acontece",
+    "qual a diferença",
+    "exemplos",
+    "consequências"
+  ]
+}
