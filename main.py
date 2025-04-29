@@ -1,9 +1,9 @@
 from core.classifier import classificar_pergunta
-from core.lexml_search import buscar_lexml
-from api.openrouter_api import perguntar_openrouter
+from core.planner import Planner
+from core.consulta_service import realizar_consulta
+from core.historico_service import salvar_consulta_no_historico
 
 def exibir_resultados(titulo, conteudo):
-    print(f"\n{'='*len(titulo)}")
     print(titulo)
     print(f"{'='*len(titulo)}")
 
@@ -15,7 +15,8 @@ def exibir_resultados(titulo, conteudo):
 
 def main():
     print("Bem-vindo ao Agente Jurídico!\n")
-    
+    planner = Planner()
+
     while True:
         try:
             pergunta = input("Digite sua pergunta jurídica (ou 'sair' para encerrar): ").strip()
@@ -24,23 +25,17 @@ def main():
                 print("Encerrando o Agente Jurídico. Até logo!")
                 break
 
-            # Classificar a pergunta
+            plano = planner.planejar(pergunta)
+            exibir_resultados("Plano de Ação Gerado", plano)
+
             categoria = classificar_pergunta(pergunta)
             exibir_resultados("Categoria Identificada", categoria)
 
-            '''
-            # Buscar no LexML se for um assunto jurídico reconhecido
-            if categoria != "Desconhecido":
-                resultados_lexml = buscar_lexml(pergunta)
-                exibir_resultados("Resultados encontrados no LexML", resultados_lexml)
-            else:
-                print("\nCategoria não identificada. Pulando busca no LexML.")
-            '''
+            if plano.get("usar_ia", True):
+                resposta_ia, fontes = realizar_consulta(pergunta)
+                exibir_resultados("Resposta da Inteligência Artificial", resposta_ia)
 
-            # Consultar a IA para resposta complementar
-            resposta_ia = perguntar_openrouter(pergunta)
-            exibir_resultados("Resposta da Inteligência Artificial", resposta_ia)
-            
+                salvar_consulta_no_historico(pergunta, resposta_ia, fontes)
 
         except Exception as e:
             print(f"\n[ERRO] Ocorreu um problema: {str(e)}\n")

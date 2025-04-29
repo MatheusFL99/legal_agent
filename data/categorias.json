@@ -18,7 +18,10 @@
     "salário",
     "hora extra",
     "indenização",
-    "aviso prévio"
+    "aviso prévio",
+    "FGTS",
+    "multa",
+    "adicional"
   ],
   "explicacao_lei": [
     "explicar",
@@ -26,7 +29,8 @@
     "me explique",
     "me diga sobre",
     "como funciona",
-    "qual é a regra"
+    "qual é a regra",
+    "exemplificar"
   ],
   "pergunta_geral": [
     "quais são",
@@ -34,6 +38,7 @@
     "o que acontece",
     "qual a diferença",
     "exemplos",
-    "consequências"
+    "consequências",
+    "diferença entre"
   ]
 }
