@@ -1,12 +1,16 @@
-from core.jusbrasil_search import buscar_legislacao_jusbrasil
-from api.openrouter_api import perguntar_openrouter
+from core.tools.jusbrasil_tool import tool_busca_jusbrasil
+from core.tools.ia_tool import tool_ia_gerar_resposta
+from core.tools.cache_tool import tool_verificar_historico
 
 def realizar_consulta(pergunta):
-    resultados_jusbrasil = buscar_legislacao_jusbrasil(pergunta)
-    
+    # verificado se ja existe resposta no historico
+    resposta_cache, fontes_cache = tool_verificar_historico(pergunta)
+    if resposta_cache:
+        return resposta_cache, fontes_cache
 
-    resultados_jusbrasil = resultados_jusbrasil[:5]    
-    fontes_links = [item['link'] for item in resultados_jusbrasil]
-    resposta_ia = perguntar_openrouter(pergunta, fontes_links)
+    # buscando e enviando para IA
+    fontes = tool_busca_jusbrasil(pergunta)
+    links = [fonte['link'] for fonte in fontes]
+    resposta = tool_ia_gerar_resposta(pergunta, links)
 
-    return resposta_ia, resultados_jusbrasil
+    return resposta, fontes
