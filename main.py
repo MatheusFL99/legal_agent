@@ -22,7 +22,7 @@ def main():
             pergunta = input("Digite sua pergunta jurídica (ou 'sair' para encerrar): ").strip()
 
             if pergunta.lower() == "sair":
-                print("Encerrando o Agente Jurídico. Até logo!")
+                print("Encerrando o Agente Jurídico.")
                 break
 
             plano = planner.planejar(pergunta)
