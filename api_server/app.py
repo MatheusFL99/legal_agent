@@ -12,27 +12,34 @@ class ConsultaInput(BaseModel):
     pergunta: str
 
 class ConsultaOutput(BaseModel):
-    pergunta: str
-    categoria: str
-    resposta: str
-    fontes: list
+    answer: str
+    disclaimer: str
+    resources: list[dict]
 
-@app.post("/consultar", response_model=ConsultaOutput)
+
+@app.post("/consultar")
 def consultar_legalmente(dados: ConsultaInput):
     try:
         categoria = classificar_pergunta(dados.pergunta)
         plano = planner.planejar(dados.pergunta)
 
         if plano.get("usar_ia", True):
-            resposta, fontes = realizar_consulta(dados.pergunta)
-            salvar_consulta_no_historico(dados.pergunta, resposta, fontes)
+            resultado = realizar_consulta(dados.pergunta)
 
-            return ConsultaOutput(
-                pergunta=dados.pergunta,
-                categoria=categoria,
-                resposta=resposta,
-                fontes=fontes
+            # Salvar no histórico com os campos esperados
+            salvar_consulta_no_historico(
+                dados.pergunta,
+                resultado["answer"],
+                resultado["resources"]
             )
+
+            # Retornar tudo conforme o frontend espera
+            return {
+                "answer": resultado["answer"],
+                "disclaimer": resultado["disclaimer"],
+                "resources": resultado["resources"]
+            }
+
         else:
             raise HTTPException(status_code=400, detail="Plano atual não permite uso da IA.")
 

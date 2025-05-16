@@ -32,10 +32,15 @@ def main():
             exibir_resultados("Categoria Identificada", categoria)
 
             if plano.get("usar_ia", True):
-                resposta_ia, fontes = realizar_consulta(pergunta)
-                exibir_resultados("Resposta da Inteligência Artificial", resposta_ia)
+                resultado = realizar_consulta(pergunta)
+                exibir_resultados("Resposta da Inteligência Artificial", resultado["answer"])
 
-                salvar_consulta_no_historico(pergunta, resposta_ia, fontes)
+                salvar_consulta_no_historico(
+                    pergunta,
+                    resultado["answer"],
+                    resultado["resources"]
+                )
+
 
         except Exception as e:
             print(f"\n[ERRO] Ocorreu um problema: {str(e)}\n")

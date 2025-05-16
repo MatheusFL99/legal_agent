@@ -1,30 +1,41 @@
+import re
 from core.tools.jusbrasil_tool import tool_busca_jusbrasil
 from core.tools.ia_tool import tool_ia_gerar_resposta
 from core.tools.cache_tool import tool_verificar_historico, tool_buscar_respostas_similares
 from core.tools.graph_rag_tool import tool_graph_rag_contexto
 
+def extrair_links(texto):
+    padrao = r'https?://[^\s)>\"]+'
+    return re.findall(padrao, texto)
+
 def realizar_consulta(pergunta):
-    # verificando se já existe resposta no histórico
     resposta_cache, fontes_cache = tool_verificar_historico(pergunta)
     if resposta_cache:
-        return resposta_cache, fontes_cache
+        return {
+            "answer": resposta_cache,
+            "disclaimer": "Esta resposta é gerada por IA e não substitui a orientação de um advogado profissional.",
+            "resources": fontes_cache or [],
+        }
 
-    fontes = tool_busca_jusbrasil(pergunta)
-    links = [fonte['link'] for fonte in fontes]
+    fontes_externas = tool_busca_jusbrasil(pergunta)
+    links_jusbrasil = [fonte['link'] for fonte in fontes_externas]
 
-    # recupera contexto e historico do mongo
-    contexto_rag = tool_graph_rag_contexto(pergunta)
+    contexto = tool_graph_rag_contexto(pergunta)
     respostas_similares = tool_buscar_respostas_similares(pergunta)
 
     contexto_completo = ""
-    if contexto_rag:
-        contexto_completo += contexto_rag + "\n\n"
+    if contexto:
+        contexto_completo += contexto + "\n\n"
     if respostas_similares:
         contexto_completo += respostas_similares
 
-    if contexto_completo:
-        resposta = tool_ia_gerar_resposta(pergunta, links, contexto=contexto_completo)
-    else:
-        resposta = tool_ia_gerar_resposta(pergunta, links)
+    resposta_ia = tool_ia_gerar_resposta(pergunta, links_jusbrasil, contexto=contexto_completo)
 
-    return resposta, fontes
+    links_ia = extrair_links(resposta_ia)
+    fontes_encontradas = [{"titulo": "Fonte da IA", "link": link} for link in links_ia]
+
+    return {
+        "answer": resposta_ia,
+        "disclaimer": "Esta resposta é gerada por IA e não substitui a orientação de um advogado profissional.",
+        "resources": fontes_encontradas,
+    }
