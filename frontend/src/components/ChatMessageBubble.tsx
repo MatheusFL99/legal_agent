@@ -84,30 +84,14 @@ export function ChatMessageBubble({ entry }: ChatMessageBubbleProps) {
                   {entry.content}
                 </ReactMarkdown>
               </div>
-              {typeof entry.fullResponse?.resources === "string" &&
-                entry.fullResponse.resources.trim() !== "" && (
-                  <div className="mt-3 pt-3 border-t border-border/50">
-                    <h4 className="text-xs font-semibold flex items-center gap-1.5 mb-1 text-muted-foreground">
-                      <LinkIcon className="h-3.5 w-3.5" />
-                      Recursos Adicionais:
-                    </h4>
-                    <div className="prose prose-sm max-w-none dark:prose-invert text-muted-foreground/90 text-xs prose-p:my-0.5 prose-ul:my-0.5 prose-li:my-0">
-                      <ReactMarkdown
-                        components={MarkdownComponents}
-                        remarkPlugins={[remarkGfm]}
-                      >
-                        {entry.fullResponse.resources}
-                      </ReactMarkdown>
-                    </div>
-                  </div>
-                )}
+
               {entry.fullResponse?.disclaimer && (
                 <div className="mt-3 pt-3 border-t border-border/50">
-                  <h4 className="text-xs font-semibold flex items-center gap-1.5 mb-1 text-amber-600 dark:text-amber-500">
+                  <h4 className="text-sm font-semibold flex items-center gap-1.5 mb-1 text-amber-600 dark:text-amber-500">
                     <AlertTriangle className="h-3.5 w-3.5" />
                     Aviso Importante:
                   </h4>
-                  <p className="whitespace-pre-wrap text-xs text-muted-foreground/90 italic">
+                  <p className="whitespace-pre-wrap text-sm text-muted-foreground/90 italic">
                     {entry.fullResponse.disclaimer}
                   </p>
                 </div>

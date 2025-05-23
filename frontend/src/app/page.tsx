@@ -44,13 +44,18 @@ export default function HomePage() {
 
     setChatHistory((prev) => [...prev, userEntry, assistantLoadingEntry]);
 
-    let assistantResponse: LegalQAndAOutput | null = null;
-
     try {
       const input: LegalQAndAInput = { question: questionText };
-      const response = await legalQAndA(input);
-      console.log("[DEBUG] Resposta do backend:", response);
-      assistantResponse = response;
+
+      // 🧠 histórico relevante (sem loading e sem erro)
+      const historicoParaEnvio = chatHistory
+        .filter((msg) => !msg.isLoading && !msg.isError)
+        .map((msg) => ({
+          role: msg.role,
+          content: msg.content,
+        }));
+
+      const response = await legalQAndA(input, historicoParaEnvio);
 
       setChatHistory((prev) =>
         prev.map((entry) =>

@@ -4,12 +4,16 @@ export interface LegalQAndAOutput {
   resources: string;
 }
 
-export interface ChatEntry {
+export type ChatEntry = {
   id: string;
   role: "user" | "ai";
   content: string;
-  timestamp: Date;
+  timestamp?: Date;
   isLoading?: boolean;
   isError?: boolean;
-  fullResponse?: LegalQAndAOutput;
-}
+  fullResponse?: {
+    answer: string;
+    disclaimer: string;
+    resources: string;
+  };
+};

@@ -17,7 +17,8 @@ const LegalQAndAOutputSchema = z.object({
 export type LegalQAndAOutput = z.infer<typeof LegalQAndAOutputSchema>;
 
 export async function legalQAndA(
-  input: LegalQAndAInput
+  input: LegalQAndAInput,
+  historico: { role: string; content: string }[]
 ): Promise<LegalQAndAOutput> {
   const API_URL = "http://localhost:8000/consultar";
 
@@ -27,7 +28,10 @@ export async function legalQAndA(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ pergunta: input.question }),
+      body: JSON.stringify({
+        pergunta: input.question,
+        historico,
+      }),
     });
 
     if (!res.ok) {

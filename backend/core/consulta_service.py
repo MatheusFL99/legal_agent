@@ -22,7 +22,7 @@ def gerar_titulo_amigavel(link: str) -> str:
     else:
         return f"Fonte: {dominio}"
 
-def realizar_consulta(pergunta):
+def realizar_consulta(pergunta, historico=[]):
     resposta_cache, fontes_cache = tool_verificar_historico(pergunta)
     if resposta_cache:
         return {
@@ -43,7 +43,7 @@ def realizar_consulta(pergunta):
     if respostas_similares:
         contexto_completo += respostas_similares
 
-    resposta_ia = tool_ia_gerar_resposta(pergunta, links_jusbrasil, contexto=contexto_completo)
+    resposta_ia = tool_ia_gerar_resposta(pergunta, links_jusbrasil, contexto_completo, historico)
 
     links_ia = extrair_links(resposta_ia)
     fontes_encontradas = [{"titulo": gerar_titulo_amigavel(link), "link": link} for link in links_ia]
