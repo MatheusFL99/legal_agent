@@ -1,8 +1,15 @@
-export type ChatEntry = {
+export interface LegalQAndAOutput {
+  answer: string;
+  disclaimer: string;
+  resources: string;
+}
+
+export interface ChatEntry {
   id: string;
-  role: "user" | "assistant";
+  role: "user" | "ai";
   content: string;
+  timestamp: Date;
   isLoading?: boolean;
   isError?: boolean;
-  timestamp: Date;
-};
+  fullResponse?: LegalQAndAOutput;
+}

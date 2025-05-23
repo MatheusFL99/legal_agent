@@ -15,6 +15,8 @@ def perguntar_openrouter(mensagem_usuario, fontes=None, contexto=""):
         'You must ONLY answer questions related to legal matters. If the question is not related to law or legal tasks, you should politely decline to answer.'
         'Provide links to public legal resources to support your answer when appropriate. '
         'All responses must be written in Brazilian Portuguese and mainly based on Brasil. '
+        'Do NOT include disclaimers directly in the main answer; these will be handled separately by the system.'
+        'Do NOT include JusBrasil links in the end of the main answer; these will be handled separately by the system.'
         'Question: {{{question}}}'
     )
 

@@ -26,19 +26,22 @@ def consultar_legalmente(dados: ConsultaInput):
         if plano.get("usar_ia", True):
             resultado = realizar_consulta(dados.pergunta)
 
-            # Salvar no histórico com os campos esperados
+            # salvar historico
             salvar_consulta_no_historico(
                 dados.pergunta,
                 resultado["answer"],
                 resultado["resources"]
             )
 
-            # Retornar tudo conforme o frontend espera
+            # retornar resultado
+            print(resultado)
             return {
                 "answer": resultado["answer"],
                 "disclaimer": resultado["disclaimer"],
                 "resources": resultado["resources"]
             }
+        
+            
 
         else:
             raise HTTPException(status_code=400, detail="Plano atual não permite uso da IA.")
